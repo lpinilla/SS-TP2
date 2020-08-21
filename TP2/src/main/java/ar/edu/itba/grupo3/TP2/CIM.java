@@ -1,11 +1,16 @@
 package ar.edu.itba.grupo3.TP2;
 
-import ar.edu.itba.grupo3.TP2.Particle;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
 public class CIM {
 
     private Map<Integer, Particle> heads;
@@ -18,58 +23,6 @@ public class CIM {
     private boolean periodicEnvironment;
     private final boolean measureRadius;
     private long duration;
-
-    public void setPeriodicEnvironment(boolean periodicEnvironment){
-        this.periodicEnvironment = periodicEnvironment;
-    }
-
-    public Map<Integer, Particle> getHeads() {
-        return heads;
-    }
-
-    public void setHeads(Map<Integer, Particle> heads) {
-        this.heads = heads;
-    }
-
-    public List<Particle> getAllParticles() {
-        return allParticles;
-    }
-
-    public void setAllParticles(List<Particle> allParticles) {
-        this.allParticles = allParticles;
-    }
-
-    public int getN() {
-        return n;
-    }
-
-    public void setN(int n) {
-        this.n = n;
-    }
-
-    public float getL() {
-        return l;
-    }
-
-    public void setL(float l) {
-        this.l = l;
-    }
-
-    public float getRc() {
-        return rc;
-    }
-
-    public void setRc(float rc) {
-        this.rc = rc;
-    }
-
-    public int getM() {
-        return m;
-    }
-
-    public void setM(int m) {
-        this.m = m;
-    }
 
     public CIM(int n, float l, float rc, int m, boolean periodicEnvironment, boolean measureRadius) throws IllegalArgumentException {
         if (n <= 0 || l <= 0 || rc <= 0 || m <= 0) throw new IllegalArgumentException("incorrect arguments");
@@ -93,18 +46,8 @@ public class CIM {
         this.duration=0;
     }
 
-
-    public long getDuration() {
-        return duration;
-    }
-
-
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
-    public CIM(int m, float rc, boolean periodicEnvironment, boolean measureRadius, String path) throws IllegalArgumentException {
-        if (path.isEmpty()) throw new IllegalArgumentException("empty path");
+    public CIM(int m, float rc, boolean periodicEnvironment, boolean measureRadius, String staticFilePath) throws IllegalArgumentException {
+        if (staticFilePath.isEmpty()) throw new IllegalArgumentException("empty path");
         if (m <= 0 || rc <= 0) throw new IllegalArgumentException("Wrong arguments");
         this.heads = new TreeMap<>();
         this.allParticles = new ArrayList<Particle>() {
@@ -119,7 +62,7 @@ public class CIM {
         this.m = m;
         this.periodicEnvironment = periodicEnvironment;
         this.measureRadius = measureRadius;
-        loadStaticFile(path);
+        loadStaticFile(staticFilePath);
         this.cellSize = l / m;
         if ((l / m) <= rc) throw new IllegalArgumentException("No se cumple la condición 'l / m > rc'");
     }
@@ -186,7 +129,7 @@ public class CIM {
 
     public Particle moveCell(Particle cell, double xDispl, double yDispl){
         if(cell == null) return null;
-        Particle ret = new Particle(cell.getX() + xDispl, cell.getY() + yDispl, cell.getRadious(), cell.getProperty());
+        Particle ret = new Particle(cell.getX() + xDispl, cell.getY() + yDispl, cell.getRadius(), cell.getProperty());
         ret.setId(cell.getId());
         Particle aux;
         for(Particle p : cell.getParticlesFromCell()){
@@ -201,7 +144,7 @@ public class CIM {
     }
 
     private Particle cloneParticle(Particle p){
-        Particle ret = new Particle(p.getX(), p.getY(), p.getProperty(), p.getRadious());
+        Particle ret = new Particle(p.getX(), p.getY(), p.getProperty(), p.getRadius());
         ret.setId(p.getId());
         return ret;
     }
@@ -275,7 +218,7 @@ public class CIM {
         double deltaX = Math.abs(p2.getX() - p1.getX());
         double deltaY = Math.abs(p2.getY() - p1.getY());
         double dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY) -
-                ((p2.getRadious() + p1.getRadious()) * measureRadiusYesNo);
+                ((p2.getRadius() + p1.getRadius()) * measureRadiusYesNo);
         //check if distance is withing rc
         Particle aux = allParticles.get(p2.getId());
         if (dist < getRc()) {
@@ -334,6 +277,28 @@ public class CIM {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void saveDynamic(String directory, int n) {
+        if (directory.isEmpty()) return;
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File(directory + "/Dynamic.txt")));
+            //writer.write(Integer.toString(getN()));
+            //writer.newLine();
+            writer.write(Integer.toString(n));
+            writer.newLine();
+            for(Particle p : getAllParticles()){
+                String builder = String.format(Locale.US, "%6.7e", p.getX()) + "    " +
+                                 String.format(Locale.US, "%6.7e", p.getY()) + "    " +
+                                 String.format(Locale.US, "%6.7e", p.getProperty());
+                writer.write(builder);
+                writer.newLine();
+            }
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

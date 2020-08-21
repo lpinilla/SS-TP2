@@ -1,10 +1,15 @@
 package ar.edu.itba.grupo3.TP2;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+@Getter
+@Setter
 public class Particle implements Comparable<Particle> {
     private Double x; //x position of particle
     private Double y; //y position of particle
@@ -12,6 +17,7 @@ public class Particle implements Comparable<Particle> {
     private Double radius; //radius of particle
     private Double property; //value of property
     private Set<Particle> neighbours; //list of neighbours
+    private final double speed = 0.03;
 
     //Vamos a tener una lista de particulas general, la primer particula de la lista hace referencia a la particula "padre" ubicada en el casillero cero
     //la segunda particula del array hace referencia a la particula "padre" ubicada en el segundo casillero del tablero....
@@ -40,62 +46,6 @@ public class Particle implements Comparable<Particle> {
         this.particlesSameCellList.add(this);
     }
 
-    public void setX(Double x) {
-        this.x = x;
-    }
-
-    public void setY(Double y) {
-        this.y = y;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setRadius(Double radius) {
-        this.radius = radius;
-    }
-
-    public void setNeighbours(Set<Particle> neighbours) {
-        this.neighbours = neighbours;
-    }
-
-    public void setParticlesSameCellList(List<Particle> particlesSameCellList) {
-        this.particlesSameCellList = particlesSameCellList;
-    }
-
-    public Double getProperty() {
-        return property;
-    }
-
-    public void setProperty(Double property) {
-        this.property = property;
-    }
-
-    public Double getX() {
-        return x;
-    }
-
-    public Double getY() {
-        return y;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public Double getRadious() {
-        return radius;
-    }
-
-    public Set<Particle> getNeighbours() {
-        return neighbours;
-    }
-
-    public List<Particle> getParticlesFromCell() {
-        return particlesSameCellList;
-    }
-
     public String toString(){
         return this.getId().toString();
     }
@@ -110,5 +60,30 @@ public class Particle implements Comparable<Particle> {
     @Override
     public int compareTo(Particle particle) {
         return this.getId().compareTo(particle.getId());
+    }
+
+    public List<Particle> getParticlesFromCell(){
+        return particlesSameCellList;
+    }
+
+    public void moveAgent(){
+        double xComponent = Math.cos(this.getProperty());
+        double yComponent = Math.sin(this.getProperty());
+        this.setX( this.getX() + xComponent * speed);
+        this.setY( this.getY() + yComponent * speed);
+    }
+
+
+    public void calculateNewAngle(double randomVal){
+        double sinAux = 0;
+        double cosAux = 0;
+        Set<Particle> neighbors = getNeighbours();
+        for(Particle p : neighbors){
+            sinAux = Math.sin(p.getProperty());
+            cosAux = Math.cos(p.getProperty());
+        }
+        sinAux /= neighbors.size();
+        cosAux /= neighbors.size();
+        this.setProperty(Math.atan2(sinAux, cosAux) + randomVal);
     }
 }
