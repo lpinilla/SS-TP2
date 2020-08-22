@@ -21,7 +21,6 @@ public class CIMTest {
         Assert.assertEquals(100, cim.getN());
         Assert.assertEquals(100, cim.getL(), 0.001);
         Assert.assertNotNull(cim.getAllParticles().get(0).getProperty());
-        System.out.println(String.format("%6.7e", cim.getAllParticles().get(0).getX()));
     }
 
     @Test
@@ -39,11 +38,12 @@ public class CIMTest {
         double randomVal;
         double eta = 0.1;
         double limit = eta / 2;
-        for(int i = 0; i < 1; i++){
+        cim.calculateNeighbors();
+        for(int i = 0; i < 10; i++){
             for(Particle p :  cim.getAllParticles()){
                 randomVal = Math.random() * (2 * limit) - limit;
-                //p.moveAgent();
-                //p.calculateNewAngle(randomVal);
+                p.moveAgent();
+                p.calculateNewAngle(randomVal);
             }
             cim.saveDynamic("resources", i);
         }

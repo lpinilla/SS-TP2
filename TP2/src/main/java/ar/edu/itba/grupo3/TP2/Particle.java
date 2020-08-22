@@ -75,15 +75,17 @@ public class Particle implements Comparable<Particle> {
 
 
     public void calculateNewAngle(double randomVal){
-        double sinAux = 0;
-        double cosAux = 0;
+        double sinAux = Math.sin(this.getProperty());
+        double cosAux = Math.cos(this.getProperty());
         Set<Particle> neighbors = getNeighbours();
         for(Particle p : neighbors){
-            sinAux = Math.sin(p.getProperty());
-            cosAux = Math.cos(p.getProperty());
+            sinAux += Math.sin(p.getProperty());
+            cosAux += Math.cos(p.getProperty());
         }
-        sinAux /= neighbors.size();
-        cosAux /= neighbors.size();
+        if(neighbors.size() > 0) {
+            sinAux /= neighbors.size();
+            cosAux /= neighbors.size();
+        }
         this.setProperty(Math.atan2(sinAux, cosAux) + randomVal);
     }
 }

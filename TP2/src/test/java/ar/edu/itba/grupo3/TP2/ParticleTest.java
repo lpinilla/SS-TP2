@@ -3,6 +3,10 @@ package ar.edu.itba.grupo3.TP2;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.LinkedList;
+import java.util.Set;
+import java.util.TreeSet;
+
 public class ParticleTest {
 
     @Test
@@ -74,6 +78,19 @@ public class ParticleTest {
         Assert.assertEquals(4.5, p.getY(), 0.001);
         Assert.assertEquals(3.3, p.getRadius(), 0.001);
         Assert.assertEquals( 2 * Math.PI, p.getProperty(), 0.001);
+    }
+
+    @Test
+    public void calculateNewAngleTest(){
+        Particle p = new Particle(4.0, 4.5, 3.3, Math.PI / 3);
+        p.setId(0);
+        double limit = 1;
+        double val = Math.random() * (2 * limit ) - limit;
+        Set<Particle> neighbors = new TreeSet<>();
+        p.setNeighbours(neighbors);
+        p.calculateNewAngle(val);
+        double arctan = 1.047197551;
+        Assert.assertEquals(arctan + val, p.getProperty(), 0.000001);
     }
 
 }
