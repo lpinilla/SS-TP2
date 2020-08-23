@@ -39,7 +39,7 @@ public class CIMTest {
         double eta = 0.1;
         double limit = eta / 2;
         cim.calculateNeighbors();
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 300; i++){
             for(Particle p :  cim.getAllParticles()){
                 randomVal = Math.random() * (2 * limit) - limit;
                 p.moveAgent();
