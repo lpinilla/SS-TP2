@@ -281,10 +281,10 @@ public class CIM {
         }
     }
 
-    public void saveDynamic(String directory, int n) {
-        if (directory.isEmpty()) return;
+    public void saveDynamic(String fileOutputPath, int n) {
+        if (fileOutputPath.isEmpty()) return;
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File(directory + "/Dynamic.txt"), true) );
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File(fileOutputPath), true) );
             writer.write(Integer.toString(n));
             writer.newLine();
             for(Particle p : getAllParticles()){
