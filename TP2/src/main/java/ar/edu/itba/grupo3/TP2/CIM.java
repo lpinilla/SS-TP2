@@ -201,6 +201,7 @@ public class CIM {
     public void calculateNeighbors() {
         double radiusMultiplier = (measureRadius) ? 1.0 : 0.0;
         Particle currentCellHead;
+        allParticles.forEach(a -> a.getNeighbours().clear());
         for (Integer cellNumber : getHeads().keySet()) {
             currentCellHead = getHeads().get(cellNumber);
             for (Particle heads : getLShapeHeaders(cellNumber)) {

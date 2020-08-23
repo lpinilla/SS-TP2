@@ -32,20 +32,6 @@ f.close()
 times = times[1:]
 
 fig, ax = plt.subplots()
-#plt.plot(times[0]['x'][0:], times[0]['y'][0:], '.', markersize=6, label='remaining')
-
-#plt.xlabel('x')
-#plt.ylabel('y')
-#plt.title('testing')
-#plt.legend()
-#
-##cambiando el tamaño de la grilla la grilla
-#ax.set_xlim(0, 100)
-#ax.set_ylim(0, 100)
-#ax.grid(linestyle='-', linewidth='0.5')
-#ax.xaxis.set_major_locator(MultipleLocator(10))
-#ax.yaxis.set_major_locator(MultipleLocator(10))
-#plt.show()
 
 def animate(i):
     plt.clf()
@@ -55,8 +41,6 @@ Writer = ani.writers['ffmpeg']
 writer = Writer(fps=300, metadata=dict(artist='me'), bitrate=1080)
 
 fig = plt.figure(figsize=(10,6))
-#plt.xlim(0, 15)
-#plt.ylim(0, 100)
 ax.set_xlim(0, 100)
 ax.set_ylim(0, 100)
 ax.grid(linestyle='-', linewidth='0.5')
