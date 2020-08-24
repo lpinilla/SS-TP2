@@ -66,11 +66,15 @@ public class Particle implements Comparable<Particle> {
         return particlesSameCellList;
     }
 
-    public void moveAgent(){
-        double xComponent = Math.cos(this.getProperty());
-        double yComponent = Math.sin(this.getProperty());
-        this.setX( this.getX() + xComponent * speed);
-        this.setY( this.getY() + yComponent * speed);
+    public void moveAgent(float l){
+        double xPos = (Math.cos(this.getProperty()) * speed) + this.getX();
+        double yPos = (Math.sin(this.getProperty()) * speed) + this.getY();
+        if(xPos < 0) xPos += l;
+        if(yPos < 0) yPos += l;
+        if(yPos > l) yPos %= l;
+        if(xPos > l) xPos %= l;
+        this.setX(xPos);
+        this.setY(yPos);
     }
 
 
@@ -82,10 +86,13 @@ public class Particle implements Comparable<Particle> {
             sinAux += Math.sin(p.getProperty());
             cosAux += Math.cos(p.getProperty());
         }
-        if(neighbors.size() > 0) {
-            sinAux /= neighbors.size();
-            cosAux /= neighbors.size();
+        if(neighbors.size() > 1) {
+            sinAux /= (float) neighbors.size();
+            cosAux /= (float) neighbors.size();
         }
-        this.setProperty(Math.atan2(sinAux, cosAux) + randomVal);
+        double newProperty = Math.atan2(sinAux * speed, cosAux * speed) + randomVal;
+        if(newProperty < 0) newProperty += Math.PI * 2;
+        this.setProperty(newProperty);
+        //neighbors.forEach(n -> n.setProperty(newProperty));
     }
 }

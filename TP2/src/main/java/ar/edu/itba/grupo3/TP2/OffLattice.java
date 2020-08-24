@@ -2,11 +2,12 @@ package ar.edu.itba.grupo3.TP2;
 
 public class OffLattice {
 
-    private final float speed = 0.03f;
+    private final float speed = 0.3f;
+    private final float precision = 0.001f;
     private CIM cim;
 
     public OffLattice(int m, float rc){
-        cim = new CIM(m, rc, true, false, "resources/Static2.txt");
+        cim = new CIM(m, rc, true, false, "resources/RandomStaticInput.txt");
         cim.loadDynamicFile("resources/Dynamic100.txt");
     }
 
@@ -14,7 +15,7 @@ public class OffLattice {
         double randomVal;
         double eta = 0.1;
         double limit = eta / 2;
-        float delta = 0.00001f;
+        float delta = precision;
         int maxHitsToStationary = 3;
         int timesWithinRange = 0;
         float lastValue = -1;
@@ -23,16 +24,16 @@ public class OffLattice {
             cim.calculateNeighbors();
             for(Particle p :  cim.getAllParticles()){
                 randomVal = (Math.random() * (2 * limit)) - limit;
-                p.moveAgent();
+                p.moveAgent(cim.getL());
                 p.calculateNewAngle(randomVal);
             }
-            cim.saveDynamic(fileOutputPath, i); //FIXME FIJARSE SI NO HAY QUE DESOCMENTAR
+            cim.saveDynamic(fileOutputPath, i); //FIXME FIJARSE SI NO HAY QUE DESCOMENTAR
             i++;
             float aux = calculateOrder();
             if(lastValue == -1){
                 lastValue = aux;
             }else{
-               if( (lastValue - delta) < aux && aux < (lastValue + delta)){
+               if( aux > 0.9 && (lastValue - delta) < aux && aux < (lastValue + delta)){
                    timesWithinRange++;
                }else{
                    timesWithinRange = 0;
@@ -52,7 +53,7 @@ public class OffLattice {
         xVal *= speed;
         yVal *= speed;
         ret = (float) Math.sqrt( (xVal * xVal) + (yVal * yVal)) / (cim.getN() * speed);
-        System.out.println(ret);
+        System.out.println((int) (ret * 100) + "%");
         return ret;
     }
 

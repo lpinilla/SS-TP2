@@ -13,7 +13,7 @@ times = [
 
 aux = {'t': 0, 'x' : [], 'y' : [], 'v' : []}
 
-with open('./Dynamic.txt') as f:
+with open('./StationaryTest1.txt') as f:
     next(f)
     for line in f:
         #-1 para ignorar el \n
@@ -46,7 +46,10 @@ ax.set_ylim(0, 100)
 ax.grid(linestyle='-', linewidth='0.5')
 ax.xaxis.set_major_locator(MultipleLocator(10))
 ax.yaxis.set_major_locator(MultipleLocator(10))
+plt.xlim(0, 100)
+plt.ylim(0, 100)
+plt.tight_layout()
 
 animation = ani.FuncAnimation(fig, animate, frames=len(times) -1, interval=1, repeat=True)
-#plt.show()
-animation.save('poc.gif', writer='imagemagick')
+plt.show()
+#animation.save('poc.gif', writer='imagemagick')

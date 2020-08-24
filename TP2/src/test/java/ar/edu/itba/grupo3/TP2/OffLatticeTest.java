@@ -9,7 +9,12 @@ public class OffLatticeTest {
 
     @Before
     public void setup(){
-        offLattice = new OffLattice(10, 3);
+        //try {
+        //    GenerateInput.inputGenerator(300, 5);
+        //}catch(Exception e){
+        //    System.out.println(e.getMessage());
+        //}
+        offLattice = new OffLattice(13, (float) 0.3);
     }
 
     @Test

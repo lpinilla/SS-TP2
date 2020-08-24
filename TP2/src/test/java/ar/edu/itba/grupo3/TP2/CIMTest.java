@@ -14,7 +14,7 @@ public class CIMTest {
 
     @Before
     public void setup(){
-        cim = new CIM(10, 3, false, false, "resources/Static100.txt");
+        cim = new CIM(13, 3, true, false, "resources/Static100.txt");
         cim.loadDynamicFile("resources/Dynamic100.txt");
         timesWithinRange = 0;
         lastValue = 0;
@@ -46,7 +46,7 @@ public class CIMTest {
             cim.calculateNeighbors();
             for(Particle p :  cim.getAllParticles()){
                 randomVal = Math.random() * (2 * limit) - limit;
-                p.moveAgent();
+                p.moveAgent(cim.getL());
                 p.calculateNewAngle(randomVal);
             }
             cim.saveDynamic("resources", i);
