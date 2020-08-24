@@ -8,7 +8,7 @@ public class OffLattice {
 
     public OffLattice(int m, float rc){
         cim = new CIM(m, rc, true, false, "resources/RandomStaticInput.txt");
-        cim.loadDynamicFile("resources/Dynamic100.txt");
+        cim.loadDynamicFile("resources/RandomDynamicInput.txt");
     }
 
     public void runSimulation(String fileOutputPath){

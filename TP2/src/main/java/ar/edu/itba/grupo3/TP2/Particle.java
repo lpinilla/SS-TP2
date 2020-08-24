@@ -90,7 +90,7 @@ public class Particle implements Comparable<Particle> {
             sinAux /= (float) neighbors.size();
             cosAux /= (float) neighbors.size();
         }
-        double newProperty = Math.atan2(sinAux * speed, cosAux * speed) + randomVal;
+        double newProperty = Math.atan2(sinAux, cosAux) + randomVal;
         if(newProperty < 0) newProperty += Math.PI * 2;
         this.setProperty(newProperty);
         //neighbors.forEach(n -> n.setProperty(newProperty));
