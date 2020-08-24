@@ -14,7 +14,7 @@ public class OffLatticeTest {
         //}catch(Exception e){
         //    System.out.println(e.getMessage());
         //}
-        offLattice = new OffLattice(13, (float) 0.3);
+        offLattice = new OffLattice(13,  0.35);
     }
 
     @Test

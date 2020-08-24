@@ -10,8 +10,8 @@ public class CIMTest {
 
     @Before
     public void setup(){
-        cim = new CIM(13, 7.5f, true, false, "resources/Static100.txt");
-        cim.loadDynamicFile("resources/Dynamic100.txt");
+        cim = new CIM(13, 0.35, true, false, "resources/RandomStaticInput.txt");
+        cim.loadDynamicFile("resources/suspect.txt");
     }
 
     @Test
@@ -35,6 +35,13 @@ public class CIMTest {
     public void neighborTest(){
         cim.calculateNeighbors();
         cim.saveNeighborsToFile("resources/neighborsTest.txt");
+    }
+
+    @Test
+    public void suspectTest(){
+        cim.calculateNeighbors();
+        //System.out.println(cim.getParticleCurrentCell(cim.getAllParticles().get(287))); 159
+        Assert.assertEquals(18, cim.getAllParticles().get(287).getNeighbours().size());
     }
 
 }

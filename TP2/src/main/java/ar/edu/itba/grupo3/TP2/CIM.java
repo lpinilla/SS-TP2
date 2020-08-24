@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.*;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,7 +15,7 @@ public class CIM {
     private List<Particle> allParticles;
     private int n; //total number of particles
     private float l; //total length
-    private float rc; //Force radius
+    private double rc; //Force radius
     private int m; //number of cells per side
     private final float cellSize;//size of cell
     private boolean periodicEnvironment;
@@ -46,7 +44,7 @@ public class CIM {
         this.duration=0;
     }
 
-    public CIM(int m, float rc, boolean periodicEnvironment, boolean measureRadius, String staticFilePath) throws IllegalArgumentException {
+    public CIM(int m, double rc, boolean periodicEnvironment, boolean measureRadius, String staticFilePath) throws IllegalArgumentException {
         if (staticFilePath.isEmpty()) throw new IllegalArgumentException("empty path");
         if (m <= 0 || rc <= 0) throw new IllegalArgumentException("Wrong arguments");
         this.heads = new TreeMap<>();
@@ -166,26 +164,26 @@ public class CIM {
         if(periodicEnvironment){
             //last row
             if(cell >= m * m - m){
-                neighborCells[1] = moveCell(heads.get( cell % m), 0.0,  m * m); //up
-                neighborCells[2] = moveCell(heads.get((cell + 1) % m),0, m * m); //upper right
+                neighborCells[1] = moveCell(heads.get(cell % m), 0,  l); //up
+                neighborCells[2] = moveCell(heads.get((cell + 1) % m),0, l); //upper right
             }
             //last column
             if(cell % m == m -1){
-                neighborCells[2] = moveCell(heads.get(cell + 1), m * m, 0); //upper right
-                neighborCells[3] = moveCell(heads.get(cell / m * m), m * m, 0); //right
-                neighborCells[4] = moveCell(heads.get((cell / m * m) - m), m * m, 0); //bottom right
+                neighborCells[2] = moveCell(heads.get(cell + 1), l, 0); //upper right
+                neighborCells[3] = moveCell(heads.get((cell / m) * m), l, 0); //right
+                neighborCells[4] = moveCell(heads.get(((cell / m) * m) - m), l, 0); //bottom right
             }
             //first row
             if(cell < m){
-                neighborCells[4] = moveCell(heads.get(cell+1 + m * m - 2 * m), 0, - m * m);
+                neighborCells[4] = moveCell(heads.get(cell+1 + m * m - m), 0, - l);
             }
             //top right corner
             if(cell == m * m -1){
-                neighborCells[2] = moveCell(heads.get(0), m * m, m * m); //upper right
+                neighborCells[2] = moveCell(heads.get(0), l, l); //upper right
             }
             //bottom right corner
             if(cell == m - 1){
-                neighborCells[4] = moveCell(heads.get(cell+1 + m * m - 2 * m), - m * m ,  - m * m);
+                neighborCells[4] = moveCell(heads.get(m * m - m), l ,  - l);
             }
         }
         return Arrays.stream(neighborCells).filter(Objects::nonNull).collect(Collectors.toList());

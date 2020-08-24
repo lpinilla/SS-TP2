@@ -3,10 +3,10 @@ package ar.edu.itba.grupo3.TP2;
 public class OffLattice {
 
     private final double speed = 0.3f;
-    private final double precision = 0.001f;
+    private final double precision = 0.01f;
     private CIM cim;
 
-    public OffLattice(int m, float rc){
+    public OffLattice(int m, double rc){
         cim = new CIM(m, rc, true, false, "resources/RandomStaticInput.txt");
         cim.loadDynamicFile("resources/RandomDynamicInput.txt");
     }
