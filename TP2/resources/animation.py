@@ -31,25 +31,37 @@ f.close()
 
 times = times[1:]
 
+#fig, ax = plt.subplots()
+#Writer = ani.writers['ffmpeg']
+#writer = Writer(fps=300, metadata=dict(artist='me'), bitrate=1080)
+#frame = '0'
+
+#ax.xaxis.set_major_locator(MultipleLocator(10))
+#ax.yaxis.set_major_locator(MultipleLocator(10))
+
+def init():
+    ax.set_ylim(0, 5)
+    ax.set_xlim(0, 5)
+    ax.grid(linestyle='-', linewidth='0.5')
+    del xdata[:]
+    del ydata[:]
+    line.set_data(xdata, ydata)
+    return line,
+
 fig, ax = plt.subplots()
+line, = ax.plot([], [], '.', markersize=6)
+ax.grid()
+xdata, ydata = [], []
 
 def animate(i):
-    plt.clf()
-    plt.plot(times[i]['x'][0:], times[i]['y'][0:], '.', markersize=6, label='remaining')
+    x = times[i]['x'][0:]
+    y = times[i]['y'][0:]
+    line.set_data(x,y)
+    ax.set_title(str(i))
+    return line,
+    #frame = str(i)
 
-Writer = ani.writers['ffmpeg']
-writer = Writer(fps=300, metadata=dict(artist='me'), bitrate=1080)
 
-fig = plt.figure(figsize=(10,6))
-ax.set_xlim(0, 100)
-ax.set_ylim(0, 100)
-ax.grid(linestyle='-', linewidth='0.5')
-ax.xaxis.set_major_locator(MultipleLocator(10))
-ax.yaxis.set_major_locator(MultipleLocator(10))
-plt.xlim(0, 100)
-plt.ylim(0, 100)
-plt.tight_layout()
-
-animation = ani.FuncAnimation(fig, animate, frames=len(times) -1, interval=1, repeat=True)
+animation = ani.FuncAnimation(fig, animate, frames=len(times) -1, interval=1, repeat=True, init_func=init)
 plt.show()
 #animation.save('poc.gif', writer='imagemagick')

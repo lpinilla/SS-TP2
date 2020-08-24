@@ -2,8 +2,8 @@ package ar.edu.itba.grupo3.TP2;
 
 public class OffLattice {
 
-    private final float speed = 0.3f;
-    private final float precision = 0.001f;
+    private final double speed = 0.3f;
+    private final double precision = 0.001f;
     private CIM cim;
 
     public OffLattice(int m, float rc){
@@ -15,10 +15,10 @@ public class OffLattice {
         double randomVal;
         double eta = 0.1;
         double limit = eta / 2;
-        float delta = precision;
+        double delta = precision;
         int maxHitsToStationary = 3;
         int timesWithinRange = 0;
-        float lastValue = -1;
+        double lastValue = -1;
         int i = 0;
         while(timesWithinRange != maxHitsToStationary){
             cim.calculateNeighbors();
@@ -29,7 +29,7 @@ public class OffLattice {
             }
             cim.saveDynamic(fileOutputPath, i); //FIXME FIJARSE SI NO HAY QUE DESCOMENTAR
             i++;
-            float aux = calculateOrder();
+            double aux = calculateOrder();
             if(lastValue == -1){
                 lastValue = aux;
             }else{
@@ -42,17 +42,17 @@ public class OffLattice {
         }
     }
 
-    public float calculateOrder(){
-        float xVal = 0.0f;
-        float yVal = 0.0f;
-        float ret;
+    public double calculateOrder(){
+        double xVal = 0.0f;
+        double yVal = 0.0f;
+        double ret;
         for(Particle p : cim.getAllParticles()){
             xVal += Math.cos(p.getProperty());
             yVal += Math.sin(p.getProperty());
         }
         xVal *= speed;
         yVal *= speed;
-        ret = (float) Math.sqrt( (xVal * xVal) + (yVal * yVal)) / (cim.getN() * speed);
+        ret =  Math.sqrt( (xVal * xVal) + (yVal * yVal)) / (cim.getN() * speed);
         System.out.println((int) (ret * 100) + "%");
         return ret;
     }
