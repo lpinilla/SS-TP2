@@ -2,6 +2,8 @@ import matplotlib.animation as ani
 import matplotlib.pyplot as plt
 from matplotlib.ticker import (AutoMinorLocator, MultipleLocator)
 
+follow = 15
+
 times = [
     {
     't' : 0,
@@ -40,8 +42,8 @@ times = times[1:]
 #ax.yaxis.set_major_locator(MultipleLocator(10))
 
 def init():
-    ax.set_ylim(0, 5)
-    ax.set_xlim(0, 5)
+    ax.set_ylim(0, 20)
+    ax.set_xlim(0, 20)
     ax.grid(linestyle='-', linewidth='0.5')
     del xdata[:]
     del ydata[:]
@@ -50,12 +52,14 @@ def init():
 
 fig, ax = plt.subplots()
 line, = ax.plot([], [], '.', markersize=6)
+part, = ax.plot([], [], '.', color="red", markersize=6)
 ax.grid()
 xdata, ydata = [], []
 
 def animate(i):
     x = times[i]['x'][0:]
     y = times[i]['y'][0:]
+    part.set_data(times[i]['x'][follow], times[i]['y'][follow])
     line.set_data(x,y)
     ax.set_title(str(i))
     return line,

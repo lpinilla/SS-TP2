@@ -125,6 +125,11 @@ public class CIM {
         }
     }
 
+    public void recalculateHeads(){
+        heads.clear();
+        allParticles.forEach(this::putInCell);
+    }
+
     public Particle moveCell(Particle cell, double xDispl, double yDispl){
         if(cell == null) return null;
         Particle ret = new Particle(cell.getX() + xDispl, cell.getY() + yDispl, cell.getRadius(), cell.getProperty());

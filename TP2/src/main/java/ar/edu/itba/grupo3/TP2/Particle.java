@@ -86,12 +86,15 @@ public class Particle implements Comparable<Particle> {
             sinAux += Math.sin(p.getProperty());
             cosAux += Math.cos(p.getProperty());
         }
-        if(neighbors.size() > 1) {
+        if(neighbors.size() > 0) {
             sinAux /= neighbors.size() + 1;
             cosAux /= neighbors.size() + 1;
         }
-        double newProperty = Math.atan2(sinAux, cosAux) + randomVal;
+        double newProperty = Math.atan2(sinAux, cosAux);
         if(newProperty < 0) newProperty += Math.PI * 2;
-        this.setProperty(newProperty);
+        double finalProperty = newProperty + randomVal;
+        if(finalProperty > Math.PI * 2) finalProperty -= 2 * Math.PI;
+        if(finalProperty < 0) finalProperty += Math.PI * 2;
+        this.setProperty(finalProperty);
     }
 }
