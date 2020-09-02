@@ -9,12 +9,19 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CIMTest {
 
     CIM cim;
+    OffLattice offLattice;
 
     @Before
     public void setup(){
         cim = new CIM(13, 1.0, true, false, "resources/RandomStaticInput.txt");
         cim.loadDynamicFile("resources/suspect90.txt");
     }
+
+//    @Before
+//    public void setup(){
+//        cim = new CIM(13, 7.5f, true, false, "resources/Static100.txt");
+//        cim.loadDynamicFile("resources/Dynamic100.txt");
+//    }
 
     @Test
     public void readFile(){
@@ -35,6 +42,8 @@ public class CIMTest {
 
     @Test
     public void neighborTest(){
+        cim = new CIM(5, 0.99f, true, false, "resources/RandomStaticInput.txt");
+        cim.loadDynamicFile("resources/RandomDynamicInput.txt");
         cim.calculateNeighbors();
         cim.saveNeighborsToFile("resources/neighborsTest.txt");
     }

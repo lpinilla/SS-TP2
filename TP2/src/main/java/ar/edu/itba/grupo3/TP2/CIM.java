@@ -41,7 +41,7 @@ public class CIM {
         this.cellSize = l / m;
         this.periodicEnvironment = periodicEnvironment;
         this.measureRadius = measureRadius;
-        this.duration=0;
+        this.duration = 0;
     }
 
     public CIM(int m, double rc, boolean periodicEnvironment, boolean measureRadius, String staticFilePath) throws IllegalArgumentException {
@@ -65,7 +65,7 @@ public class CIM {
         if ((l / m) <= rc) throw new IllegalArgumentException("No se cumple la condición 'l / m > rc'");
     }
 
-    public void loadStaticFile(String path)  {
+    public void loadStaticFile(String path) {
         if (path.isEmpty()) return;
         File file = new File(path);
         try {
@@ -135,8 +135,8 @@ public class CIM {
         Particle ret = new Particle(cell.getX() + xDispl, cell.getY() + yDispl, cell.getRadius(), cell.getProperty());
         ret.setId(cell.getId());
         Particle aux;
-        for(Particle p : cell.getParticlesFromCell()){
-            if(p.equals(ret)) continue;
+        for (Particle p : cell.getParticlesFromCell()) {
+            if (p.equals(ret)) continue;
             aux = cloneParticle(p);
             //agregar desplazamiento
             aux.setX(aux.getX() + xDispl);
@@ -146,27 +146,27 @@ public class CIM {
         return ret;
     }
 
-    private Particle cloneParticle(Particle p){
+    private Particle cloneParticle(Particle p) {
         Particle ret = new Particle(p.getX(), p.getY(), p.getProperty(), p.getRadius());
         ret.setId(p.getId());
         return ret;
     }
 
 
-    public List<Particle> getLShapeHeaders(int cell){
+    public List<Particle> getLShapeHeaders(int cell) {
         Particle[] neighborCells = new Particle[5];
         neighborCells[0] = heads.get(cell);
         Particle p;
         //up
-        if((cell + m) < m * m) neighborCells[1] = heads.get(cell + m);
+        if ((cell + m) < m * m) neighborCells[1] = heads.get(cell + m);
         //upper right
-        if((cell + m + 1) < m * m) neighborCells[2] = heads.get(cell + m + 1);
+        if ((cell + m + 1) < m * m) neighborCells[2] = heads.get(cell + m + 1);
         //right
-        if((cell +1) < (((cell +1) / m) * m) + m - 1) neighborCells[3] = heads.get(cell + 1);
+        if ((cell + 1) < (((cell + 1) / m) * m) + m - 1) neighborCells[3] = heads.get(cell + 1);
         //bottom right
-        if((cell - m +1) > 0) neighborCells[4] = heads.get(cell - m + 1);
+        if ((cell - m + 1) > 0) neighborCells[4] = heads.get(cell - m + 1);
         //corrections
-        if(periodicEnvironment){
+        if (periodicEnvironment) {
             //last row
             if(cell >= m * m - m){
                 neighborCells[1] = moveCell(heads.get(cell % m), 0,  l); //up
@@ -261,7 +261,7 @@ public class CIM {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(f));
                 writer.write(Integer.toString(N));
                 writer.newLine();
-                writer.write(M+",");
+                writer.write(M + ",");
                 for (long time : times) {
                     writer.write(time + ",");
                 }
@@ -270,7 +270,7 @@ public class CIM {
                 writer.close();
             } else {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(f, true));
-                writer.write(M+",");
+                writer.write(M + ",");
                 for (long time : times) {
                     writer.write(time + ",");
                 }
@@ -287,13 +287,15 @@ public class CIM {
     public void saveDynamic(String fileOutputPath, int n) {
         if (fileOutputPath.isEmpty()) return;
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File(fileOutputPath), true) );
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File(fileOutputPath), true));
+            writer.write(Integer.toString(getAllParticles().size()));
+            writer.newLine();
             writer.write(Integer.toString(n));
             writer.newLine();
-            for(Particle p : getAllParticles()){
-                String builder = String.format(Locale.US, "%6.7e", p.getX()) + "    " +
-                                 String.format(Locale.US, "%6.7e", p.getY()) + "    " +
-                                 String.format(Locale.US, "%6.7e", p.getProperty());
+            for (Particle p : getAllParticles()) {
+                String builder = (String.valueOf(p.getId())) + "    " + String.format(Locale.US, "%6.7e", p.getX()) + "    " +
+                        String.format(Locale.US, "%6.7e", p.getY()) + "    " + String.format(Locale.US, "%6.7e", p.getSpeed() * Math.cos(p.getProperty())) + "    " +
+                        String.format(Locale.US, "%6.7e", p.getSpeed() * Math.sin(p.getProperty())) + "    "   + String.format(Locale.US, "%6.7e", p.getProperty());
                 writer.write(builder);
                 writer.newLine();
             }

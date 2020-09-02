@@ -8,17 +8,35 @@ public class OffLatticeTest {
     OffLattice offLattice;
 
     @Before
-    public void setup(){
-        //try {
-        //    GenerateInput.inputGenerator(300, 20);
-        //}catch(Exception e){
-        //    System.out.println(e.getMessage());
-        //}
-        offLattice = new OffLattice(13,  1.0);
+    public void setup() {
+        try {
+            GenerateInput.inputGenerator(250, 5);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        offLattice = new OffLattice(5, 0.999);
     }
 
     @Test
-    public void runSimulationTest(){
-        offLattice.runSimulation("resources/StationaryTest1.txt");
+    public void runSimulationTest() {
+        offLattice.runSimulation("resources/StationaryTest.txt", true, 4, false);
+        //offLattice.saveEtavsTime(0);
     }
+
+    @Test
+    public void plotVaVsEta() {
+        double maxEta = 5;
+        double etaJump = 0.5;
+        double eta = 0.001;
+        while (eta < maxEta) {
+            offLattice.runSimulation("resources/StationaryTest.txt", false, eta, true);
+            //System.out.print("eta ");
+            eta += etaJump;
+        }
+        offLattice.saveEtavsTime(0);
+
+
+    }
+
+
 }
